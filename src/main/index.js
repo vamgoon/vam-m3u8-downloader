@@ -20,9 +20,11 @@ function createWindow () {
    * Initial window options
    */
   mainWindow = new BrowserWindow({
-    height: 563,
+    height: 670,
     useContentSize: true,
-    width: 1000
+    width: 1002,
+    resizable: false,
+    title: 'vam-m3u8-downloader'
   })
 
   mainWindow.loadURL(winURL)

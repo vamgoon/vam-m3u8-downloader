@@ -9,19 +9,18 @@
     name: 'config',
     props: ['configVisible'],
     methods: {
-      close() {
-        this.configVisible = false
-        this.$emit('update:configVisible')
+      close () {
+        this.subConfigVisible = false
       }
     },
     computed: {
       subConfigVisible: {
         get: function () {
-          return this.dialogVisible;
+          return this.configVisible
         },
         // setter
         set: function (newValue) {
-          this.$emit('update:dialogVisible', newValue);
+          this.$emit('update:configVisible', newValue)
         }
       }
     }

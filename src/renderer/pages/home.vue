@@ -17,7 +17,7 @@
         </header>
         <main>
             <Button @click="mask">mask</Button>
-            <config v-if="configVisible" :configVisible="configVisible"></config>
+            <config v-if="configVisible" :configVisible.sync="configVisible"></config>
         </main>
     </div>
 </template>

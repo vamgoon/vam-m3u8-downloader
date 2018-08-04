@@ -9,25 +9,37 @@
                 </Col>
                 <Col span="12" class="input-area">
                     <Input v-model="headerModel.searchValue" size="small" class="search-input">
-                        <Button slot="append" icon="md-download">下载</Button>
+                        <!--<Button  icon="md-download">下载</Button>-->
+                        <Button slot="append" icon="ios-download-outline" type="primary">下载</Button>
                     </Input>
                 </Col>
             </Row>
         </header>
         <main>
-
+            <Button @click="mask">mask</Button>
+            <config v-if="configVisible" :configVisible="configVisible"></config>
         </main>
     </div>
 </template>
 
 <script>
+  import Config from '../components/config'
   export default {
     name: 'home',
     data () {
       return {
         headerModel: {
           searchValue: ''
-        }
+        },
+        configVisible: false
+      }
+    },
+    components: {
+      Config
+    },
+    methods: {
+      mask () {
+        this.configVisible = true
       }
     }
   }

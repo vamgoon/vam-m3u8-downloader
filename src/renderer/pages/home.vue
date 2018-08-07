@@ -9,16 +9,23 @@
                 </Col>
                 <Col span="12" class="input-area">
                     <Input v-model="headerModel.searchValue" size="small" class="search-input">
-                        <!--<Button  icon="md-download">下载</Button>-->
                         <Button slot="append" icon="ios-download-outline" type="primary">下载</Button>
                     </Input>
+                </Col>
+                <Col span="3" class="config-area">
+                    <div>
+                        <Tooltip content="设置" placement="top">
+                            <Icon type="ios-settings" size="20" color="white" @click="handleSettingClick"/>
+                        </Tooltip>
+                    </div>
                 </Col>
             </Row>
         </header>
         <main>
-            <Button @click="mask">mask</Button>
-            <config v-if="configVisible" :configVisible.sync="configVisible"></config>
+
         </main>
+        <!--设置界面-->
+        <config v-if="configVisible" :configVisible.sync="configVisible"></config>
     </div>
 </template>
 
@@ -38,7 +45,7 @@
       Config
     },
     methods: {
-      mask () {
+      handleSettingClick () {
         this.configVisible = true
       }
     }
@@ -76,11 +83,17 @@
         text-align: center;
         font-size: 20px;
     }
-    header .input-area {
+    header .input-area, header .config-area {
         height: 60px;
         display: flex;
         justify-content: center;
         flex-direction: column;
+    }
+    header .config-area>div {
+        padding-left: 30px;
+    }
+    header .config-area>div i {
+        cursor: pointer;
     }
     header .search-input {
         overflow: hidden;
@@ -89,7 +102,6 @@
     }
     main {
         flex: 1;
-        background-color: #cccccc;
         border: 1px solid #cccccc;
         border-top: 0;
     }

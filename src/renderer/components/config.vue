@@ -2,14 +2,15 @@
     <div id="mask">
         <div>
             <div class="left">
-                <Input v-model="value11" icon="ios-clock-outline">
+                <Input v-model="value11" class="inputOuterBox">
                     <span slot="prepend">缓存目录</span>
-                    <Button slot="append" icon="ios-search"></Button>
+                    <Button slot="append" icon="ios-folder"></Button><Icon type="ios-folder-outline" />
                 </Input><br>
-                <Input v-model="value1">
+                <Input v-model="value1" class="inputOuterBox">
                     <span slot="prepend">存储目录</span>
+                <Button slot="append" icon="ios-folder-outline"></Button>
                 </Input><br>
-                <Input v-model="value">
+                <Input v-model="value" class="inputOuterBox">
                     <span slot="prepend">缓存目录</span>
                 </Input>
                 <br>
@@ -84,5 +85,8 @@
         top: 20px;
         right: 20px;
         cursor: pointer;
+    }
+    .inputOuterBox {
+        overflow: hidden;
     }
 </style>

@@ -23,7 +23,13 @@ function createWindow () {
     height: 670,
     useContentSize: true,
     width: 1002,
-    frame: false
+    frame: false,
+    resizable: false,
+    show: false
+  })
+
+  mainWindow.once('ready-to-show', () => {
+    mainWindow.show()
   })
 
   mainWindow.loadURL(winURL)

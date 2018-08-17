@@ -12,12 +12,21 @@
                         <Button slot="append" icon="ios-download-outline" type="primary">下载</Button>
                     </Input>
                 </Col>
-                <Col span="3" class="config-area">
-                    <div>
+                <Col span="5" class="config-area">
+                    <Row class="icon-area">
                         <Tooltip content="设置" placement="top">
                             <Icon type="ios-settings" size="20" color="white" @click="handleSettingClick"/>
                         </Tooltip>
-                    </div>
+                        <Tooltip content="设置" placement="top">
+                            <Icon type="ios-settings" size="20" color="white" @click="handleSettingClick"/>
+                        </Tooltip>
+                        <Tooltip content="设置" placement="top">
+                            <Icon type="ios-settings" size="20" color="white" @click="handleSettingClick"/>
+                        </Tooltip>
+                    </Row>
+                </Col>
+                <Col span="1">
+                    <Icon type="md-close" size="20" color="white" @click="handleCloseClick" class="close-button"/>
                 </Col>
             </Row>
         </header>
@@ -25,7 +34,9 @@
 
         </main>
         <!--设置界面-->
-        <config v-if="configVisible" :configVisible.sync="configVisible"></config>
+        <transition name='fade'>
+            <config v-if="configVisible" :configVisible.sync="configVisible"></config>
+        </transition>
     </div>
 </template>
 
@@ -47,6 +58,9 @@
     methods: {
       handleSettingClick () {
         this.configVisible = true
+      },
+      handleCloseClick () {
+        window.close()
       }
     }
   }
@@ -89,20 +103,33 @@
         justify-content: center;
         flex-direction: column;
     }
-    header .config-area>div {
-        padding-left: 30px;
-    }
-    header .config-area>div i {
+    header .config-area i {
         cursor: pointer;
+    }
+    header .icon-area {
+        padding: 0 20px;
     }
     header .search-input {
         overflow: hidden;
         -webkit-app-region: no-drag !important;
         z-index: 1000;
     }
+    header .close-button {
+        position: absolute;
+        top: 3px;
+        right: 3px;
+        cursor: pointer;
+    }
     main {
         flex: 1;
         border: 1px solid #cccccc;
         border-top: 0;
+    }
+
+    .fade-enter-active, .fade-leave-active {
+        transition: all .3s
+    }
+    .fade-enter, .fade-leave-to{
+        opacity: 0;
     }
 </style>

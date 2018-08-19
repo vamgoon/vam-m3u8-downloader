@@ -105,6 +105,7 @@
     }
     header .config-area i {
         cursor: pointer;
+        -webkit-app-region: no-drag !important;
     }
     header .icon-area {
         padding: 0 20px;
@@ -119,6 +120,7 @@
         top: 3px;
         right: 3px;
         cursor: pointer;
+        -webkit-app-region: no-drag !important;
     }
     main {
         flex: 1;

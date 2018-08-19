@@ -59,7 +59,7 @@
         right: 0;
         background-color: rgba(55,55,55,.6);
         height: 100%;
-        z-index: 1000;
+        z-index: 1001;
         display: flex;
         justify-content: center;
         align-items: center;
@@ -85,6 +85,7 @@
         top: 20px;
         right: 20px;
         cursor: pointer;
+        -webkit-app-region: no-drag !important;
     }
     .inputOuterBox {
         overflow: hidden;

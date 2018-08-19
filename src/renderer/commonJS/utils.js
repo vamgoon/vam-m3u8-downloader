@@ -20,4 +20,3 @@ export const getOS = () => {
 export const getHomePath = () => {
   return process.env.HOME
 }
-

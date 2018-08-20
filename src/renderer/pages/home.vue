@@ -8,9 +8,11 @@
                     </span>
                 </Col>
                 <Col span="12" class="input-area">
-                    <Input v-model="headerModel.searchValue" size="small" class="search-input">
-                        <Button slot="append" icon="ios-download-outline" type="primary">下载</Button>
-                    </Input>
+                    <div>
+                        <Input v-model="headerModel.searchValue" size="small" class="search-input">
+                        </Input>
+                        <Button icon="ios-download-outline" size="small" type="error">下载</Button>
+                    </div>
                 </Col>
                 <Col span="5" class="config-area">
                     <Row class="icon-area">
@@ -102,6 +104,22 @@
         display: flex;
         justify-content: center;
         flex-direction: column;
+    }
+    header .input-area>div {
+        display: flex;
+        overflow: hidden;
+    }
+    header .input-area>div>button {
+        position: absolute;
+        z-index: 1000;
+        right: 0;
+        border-top-left-radius: 0;
+        border-bottom-left-radius: 0;
+        background-color: #b72712;
+    }
+    header .input-area>div>button:active {
+        background-color: #ed4014;
+        transition: none;
     }
     header .config-area i {
         cursor: pointer;

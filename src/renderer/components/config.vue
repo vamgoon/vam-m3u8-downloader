@@ -2,11 +2,11 @@
     <div id="mask">
         <div>
             <div class="left">
-                <Input v-model="value11" class="inputOuterBox">
+                <Input v-model="cache" class="inputOuterBox">
                     <span slot="prepend">缓存目录</span>
                     <Button slot="append" icon="ios-folder"></Button><Icon type="ios-folder-outline" />
                 </Input><br>
-                <Input v-model="value1" class="inputOuterBox">
+                <Input v-model="destination" class="inputOuterBox">
                     <span slot="prepend">存储目录</span>
                 <Button slot="append" icon="ios-folder-outline"></Button>
                 </Input><br>
@@ -24,11 +24,16 @@
 </template>
 
 <script>
+  import configOptions from '../config/index'
+  import fs from 'fs'
   export default {
     name: 'config',
     props: ['configVisible'],
     data () {
       return {
+        cache: configOptions.cache_path,
+        destination: configOptions.destination_path,
+        value: ''
       }
     },
     methods: {
@@ -46,6 +51,27 @@
           this.$emit('update:configVisible', newValue)
         }
       }
+    },
+    mounted () {
+      fs.stat(this.cache, (x, y) => {
+        if (x) {
+          fs.mkdir(this.cache, (err) => {
+            if (err) {
+              this.$Message.error({
+                content: x.toString(),
+                duration: 3
+              })
+            } else {
+              this.$Message.success({
+                content: `${this.cache}创建成功`,
+                duration: 3
+              })
+            }
+          })
+        } else {
+          this.$Message.success('yes')
+        }
+      })
     }
   }
 </script>

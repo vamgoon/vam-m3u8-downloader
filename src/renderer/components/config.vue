@@ -2,18 +2,17 @@
     <div id="mask">
         <div>
             <div class="left">
-                <Input v-model="cache" class="inputOuterBox">
+                <Input v-model="config.cache_path" class="inputOuterBox">
                     <span slot="prepend">缓存目录</span>
                     <Button slot="append" icon="ios-folder"></Button><Icon type="ios-folder-outline" />
                 </Input><br>
-                <Input v-model="destination" class="inputOuterBox">
+                <Input v-model="config.destination_path" class="inputOuterBox">
                     <span slot="prepend">存储目录</span>
                 <Button slot="append" icon="ios-folder-outline"></Button>
                 </Input><br>
-                <Input v-model="value" class="inputOuterBox">
-                    <span slot="prepend">缓存目录</span>
+                <Input v-model="config.download_num" max="20" class="inputOuterBox">
+                    <span slot="prepend">并行下载数目</span>
                 </Input>
-                <br>
             </div>
             <div class="right">
 
@@ -25,15 +24,13 @@
 
 <script>
   import configOptions from '../config/index'
-  import fs from 'fs'
+
   export default {
     name: 'config',
     props: ['configVisible'],
     data () {
       return {
-        cache: configOptions.cache_path,
-        destination: configOptions.destination_path,
-        value: ''
+        config: configOptions
       }
     },
     methods: {
@@ -53,25 +50,22 @@
       }
     },
     mounted () {
-      fs.stat(this.cache, (x, y) => {
-        if (x) {
-          fs.mkdir(this.cache, (err) => {
-            if (err) {
-              this.$Message.error({
-                content: x.toString(),
-                duration: 3
-              })
-            } else {
-              this.$Message.success({
-                content: `${this.cache}创建成功`,
-                duration: 3
-              })
-            }
+      if (!localStorage.getItem('init')) {
+        localStorage.setItem('init', '1')
+        Object.keys(this.config).forEach((item) => {
+          localStorage.setItem(item, this.config[item])
+        })
+      }
+    },
+    watch: {
+      config: {
+        handler (curVal) {
+          Object.keys(curVal).forEach((item) => {
+            localStorage.setItem(item, curVal[item])
           })
-        } else {
-          this.$Message.success('yes')
-        }
-      })
+        },
+        deep: true
+      }
     }
   }
 </script>

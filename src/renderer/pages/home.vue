@@ -11,19 +11,16 @@
                     <div>
                         <Input v-model="headerModel.searchValue" size="small" class="search-input">
                         </Input>
-                        <Button icon="ios-download-outline" size="small" type="error">下载</Button>
+                        <Button icon="ios-download-outline" size="small" type="error" @click="start">下载</Button>
                     </div>
                 </Col>
                 <Col span="5" class="config-area">
                     <Row class="icon-area">
                         <Tooltip content="设置" placement="top">
-                            <Icon type="ios-settings" size="20" color="white" @click="handleSettingClick"/>
+                            <Icon type="ios-cog-outline" size="20" color="white" @click="handleSettingClick"/>
                         </Tooltip>
-                        <Tooltip content="设置" placement="top">
-                            <Icon type="ios-settings" size="20" color="white" @click="handleSettingClick"/>
-                        </Tooltip>
-                        <Tooltip content="设置" placement="top">
-                            <Icon type="ios-settings" size="20" color="white" @click="handleSettingClick"/>
+                        <Tooltip content="日志" placement="top">
+                            <Icon type="ios-list-box-outline" size="20" color="white" @click="handleLogClick"/>
                         </Tooltip>
                     </Row>
                 </Col>
@@ -33,8 +30,24 @@
             </Row>
         </header>
         <main>
-
+          <download class="download-area"></download>
         </main>
+        <footer>
+            <div>
+                <Input v-model="footerModel.fileName" size="small" class="save-name-input">
+                    <span slot="append">.mp4</span>
+                </Input>
+                <Button icon="ios-download-outline" size="small" type="error">删除</Button>
+                <Button icon="ios-download-outline" size="small" type="error">合并</Button>
+                <p>视频时长 {{footerModel.totalTime}}</p>
+                <p>片段总个数 {{footerModel.totalNumber}}</p>
+                <p>已下载个数 0</p>
+            </div>
+        </footer>
+        // 日志drawer
+        <transition name="slide-fade">
+            <vam-log v-if="showLog" :logData="logData"></vam-log>
+        </transition>
         <!--设置界面-->
         <transition name='fade'>
             <config v-if="configVisible" :configVisible.sync="configVisible"></config>
@@ -44,6 +57,10 @@
 
 <script>
   import Config from '../components/config'
+  import Download from '../components/download'
+  import VamLog from '../components/vam-log'
+  import {parseM3u8} from '../utils/parseM3u8'
+  import {getCurrentTime} from '../utils/utils'
   export default {
     name: 'home',
     data () {
@@ -51,18 +68,42 @@
         headerModel: {
           searchValue: ''
         },
-        configVisible: false
+        configVisible: false,
+        showLog: true,
+        footerModel: {
+          totalTime: '00:00',
+          totalNumber: 0,
+          fileName: ''
+        },
+        logData: [1, 2, 4, 5]
       }
     },
     components: {
-      Config
+      Config,
+      Download,
+      VamLog
     },
     methods: {
-      handleSettingClick () {
+      start () {
+        this.parseM3u8()
+      },
+      parseM3u8 () {
+        let result = parseM3u8(this.headerModel.searchValue)
+        result.then((res) => {
+          this.footerModel.totalTime = res.totalTime
+          this.footerModel.totalNumber = res.totalNumber
+          this.$eHub.$emit('download', res.urlList)
+        })
+      },
+      handleSettingClick () { // 显示/隐藏 setting
         this.configVisible = true
       },
-      handleCloseClick () {
-        window.close()
+      handleLogClick () { // 显示/隐藏log
+        this.showLog = !this.showLog
+      },
+      handleCloseClick () { // 关闭当前window
+        // window.close()
+        this.logData.push(getCurrentTime() + ' | ' + Math.random().toString())
       }
     }
   }
@@ -80,6 +121,7 @@
         height: 100%;
         display: flex;
         flex-direction: column;
+        overflow: hidden;
     }
     header {
         width: 100%;
@@ -99,13 +141,13 @@
         text-align: center;
         font-size: 20px;
     }
-    header .input-area, header .config-area {
+    header .input-area, header .config-area, footer {
         height: 60px;
         display: flex;
         justify-content: center;
         flex-direction: column;
     }
-    header .input-area>div {
+    header .input-area>div, footer>div {
         display: flex;
         overflow: hidden;
     }
@@ -146,10 +188,52 @@
         border-top: 0;
     }
 
+    main .download-area {
+    }
+
+    footer {
+        position: absolute;
+        bottom: 0;
+        height: 40px;
+        width: 100%;
+        z-index: 1000;
+        background-color: #b72712;
+        padding-left: 10px;
+    }
+    footer .save-name-input {
+        width: 50%;
+    }
+    footer button {
+        background-color: #b72712;
+        margin-left: 10px;
+    }
+    footer button:active {
+        background-color: #ed4014;
+        transition: none;
+    }
+    footer>div>p {
+        height: 24px;
+        line-height: 24px;
+        color: #ffffff;
+        text-align: center;
+        flex: 1;
+    }
+
     .fade-enter-active, .fade-leave-active {
         transition: all .3s
     }
     .fade-enter, .fade-leave-to{
+        opacity: 0;
+    }
+    .slide-fade-enter-active {
+        transition: all .3s ease;
+    }
+    .slide-fade-leave-active {
+        transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    .slide-fade-enter, .slide-fade-leave-to
+        /* .slide-fade-leave-active for below version 2.1.8 */ {
+        transform: translateY(100%);
         opacity: 0;
     }
 </style>
